@@ -6,32 +6,33 @@ public class RandomSpheres : MonoBehaviour {
 	[SerializeField]
 	GameObject objToRandomize;
 
+	GameObject[] spheres;
+	public GameObject[] Spheres
+	{
+		get{return spheres;}
+	}
+
 	public int objectsToSpawn = 0;
 	int count;
 
-	int minAreaSizeX = -5;
-	int maxAreaSizeX = 15;
-	int areaSizeY = 8;
+	public int minAreaSizeX = -5;
+	public int maxAreaSizeX = 15;
+	public int minAreaSizeY = -8;
+	public int maxAreaSizeY = 6;
 
     float radius;
 
-	void Start()
+	public IEnumerator SpawnSpheres (string musicKit)
 	{
-		StartCoroutine ("SpawnSpheres");
-	}
-
-	public IEnumerator SpawnSpheres ()
-	{
-		Bounds maxBounds = RecursiveMeshBB (objToRandomize);
-		Debug.Log (maxBounds);
-		radius = maxBounds.size.magnitude;
-		Debug.Log (radius);
-
 		SphereAudio asgAu = new SphereAudio();
+		spheres = new GameObject[objectsToSpawn];
+
+		Bounds maxBounds = RecursiveMeshBB (objToRandomize);
+		radius = maxBounds.size.magnitude;
 
 		for (int i = 0; i < objectsToSpawn; i++) 
 		{
-			Vector3 randomPosition = new Vector3 (Random.Range (minAreaSizeX, maxAreaSizeX), Random.Range (-areaSizeY, areaSizeY), 10);
+			Vector3 randomPosition = new Vector3 (Random.Range (minAreaSizeX, maxAreaSizeX), Random.Range (minAreaSizeY, maxAreaSizeY), 10);
 
 			if ( !Physics.CheckSphere (randomPosition, radius) )
 			{
@@ -41,12 +42,11 @@ public class RandomSpheres : MonoBehaviour {
 				}
 				else
 				{
-					//Instantiate (objToRandomize, randomPosition, Quaternion.identity);
 					GameObject tmp = Instantiate (objToRandomize, randomPosition, Quaternion.identity) as GameObject;
 					count++;
 				
-					asgAu.AttachSound("Drum", count, tmp);
-					//Debug.Log(tmp.transform.position + " " + count);
+					asgAu.AttachSound(musicKit, count, tmp);
+					spheres[count] = tmp;
 				}
 			}
 			yield return new WaitForSeconds(0.09f);

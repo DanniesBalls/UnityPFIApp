@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class CollisionScript : MonoBehaviour {
-
-	public float speed;
-
+	
 	Rigidbody playerSim;
 
 	Vector3 ViewPortMaxDist;
@@ -31,31 +30,31 @@ public class CollisionScript : MonoBehaviour {
 		if (transform.position.x > maxDistX || transform.position.y > maxDistY 
 		    || transform.position.x < -maxDistX || transform.position.y < -maxDistY)
 		{
-			Debug.Log("out of bounds");
+			Debug.Log("out of bounds: " + this.gameObject);
 			Destroy(this.gameObject);
 			//playerSim.AddForce(DirToLastHitObject, ForceMode.Force);
 		}
 
 
 	}
-
-	void FixedUpdate()
-	{
-		//this.transform.Translate (speed * Input.GetAxis ("Horizontal") * Time.fixedDeltaTime, speed * Input.GetAxis ("Vertical") * Time.fixedDeltaTime, 0);
-				
-	}
-
+	
 	void OnCollisionEnter(Collision theThingIHit) 
 	{
 		if (theThingIHit.gameObject.tag == "MusicCollider" )
 		{
-			Debug.Log("Collision");
+			Debug.Log("Collision: " + this.gameObject.name);
+
+			//This should happen when the object is destroyed
+			MenuOptions.CurrentPlayer.Score++;
 
 			Vector3 normalDir = theThingIHit.contacts[0].normal;
 			playerSim.AddForce (normalDir * 15, ForceMode.Impulse);
 
+			//Destroy (theThingIHit.gameObject);
 			//lastThingIhit = theThingIHit.gameObject.transform.position;
 		}
+
+
 	}
 
 	

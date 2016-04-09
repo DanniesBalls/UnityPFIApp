@@ -4,12 +4,14 @@ using System.Collections;
 public class ProjectileShooter : MonoBehaviour {
 	
 	GameObject prefab;
+	GameObject player;
 	AudioSource onShot;
 	
 	void Start () 
 	{
 		prefab = Resources.Load ("Prefabs/Projectile") as GameObject;
-		onShot = GameObject.Find ("Player").GetComponent<AudioSource> ();
+		player = GameObject.Find ("Player");
+		onShot = GameObject.Find ("ProjectileShooter").GetComponent<AudioSource> ();
 		Debug.Log (prefab);
 	}
 	
@@ -17,6 +19,13 @@ public class ProjectileShooter : MonoBehaviour {
 	{
 	}
 	
+	int ammonition = 10;
+	public int Ammonition
+	{
+		get {return ammonition;}
+		set {ammonition = value;}
+	}
+
 	//function for shooting a projectile
 	public void Shoot  () 
 	{
@@ -27,7 +36,7 @@ public class ProjectileShooter : MonoBehaviour {
 		Debug.Log (cursorInWorldPos);
 		
 		//our player position
-		Vector3 myPos = new Vector3 (this.gameObject.transform.position.x, this.gameObject.transform.position.y, 10);
+		Vector3 myPos = new Vector3 (player.transform.position.x, player.transform.position.y, player.transform.position.z);
 		
 		//a vector showing in which direction we should fire the projectile
 		//normalize sets the magnitude to 1
